@@ -35,21 +35,23 @@ def asp_from_config(filename):
     rpcpass = None
     with open(filename, 'r') as f:
         for line in f:
-            (key, val) = line.rstrip().replace(' ', '').split('=')
-            if key == 'rpcuser':
-                rpcuser = val
-            elif key == 'rpcpassword':
-                rpcpass = val
-            elif key == 'rpcport':
-                rpcport = val
-            elif key == 'rpcconnect':
-                rpcconn = val
+            line = line.rstrip()
+            if line.find("=") > 0: 
+                (key, val) = line.rstrip().replace(' ', '').split('=')
+                if key == 'rpcuser':
+                    rpcuser = val
+                elif key == 'rpcpassword':
+                    rpcpass = val
+                elif key == 'rpcport':
+                    rpcport = val
+                elif key == 'rpcconnect':
+                    rpcconn = val
         f.close()
     if rpcuser is not None and rpcpass is not None:
         rpcurl = 'http://%s:%s@%s:%s' % (rpcuser, rpcpass, rpcconn, rpcport)
         #print_stderr('RPC server: %s' % rpcurl)
         return AuthServiceProxy(rpcurl)
-n
+
 configfile = sys.argv[1]
 rpc = asp_from_config(configfile)
 
